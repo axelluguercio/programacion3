@@ -22,12 +22,12 @@ public class ServicioCaminos {
     public List<List<Integer>> caminos() {
         List<List<Integer>> caminos = new ArrayList<>();
         List<List<Integer>> cola = new LinkedList<>();
-        List<Integer> caminoInicial = new ArrayList<>();
+        Set<Integer> visitados = new HashSet<>(); // Conjunto de arcos visitados
 
+        List<Integer> caminoInicial = new ArrayList<>();
         caminoInicial.add(this.origen);
         cola.add(caminoInicial);
 
-        // mientras la pila no este vacia
         while (!cola.isEmpty()) {
             List<Integer> caminoActual = cola.remove(0);
             int ultimoNodo = caminoActual.get(caminoActual.size() - 1);
@@ -37,20 +37,22 @@ public class ServicioCaminos {
                 continue;
             }
 
-            if (caminoActual.size() >= this.lim) { // si cumple el limite
+            if (caminoActual.size() >= this.lim) {
                 continue;
             }
 
-            Iterator<Integer> adyacentes = grafo.obtenerAdyacentes(ultimoNodo); // obtiene adyacentes
-            while (adyacentes.hasNext()) { // itera
+            Iterator<Integer> adyacentes = grafo.obtenerAdyacentes(ultimoNodo);
+            while (adyacentes.hasNext()) {
                 int nodoAdyacente = adyacentes.next();
-                if (!caminoActual.contains(nodoAdyacente)) { // si el camino no fue explorado lo agrega como nuevo camino
+                if (!visitados.contains(nodoAdyacente)) { // Verificar si el arco ya fue visitado
+                    visitados.add(nodoAdyacente); // Marcar el arco como visitado
                     List<Integer> nuevoCamino = new ArrayList<>(caminoActual);
                     nuevoCamino.add(nodoAdyacente);
                     cola.add(nuevoCamino);
                 }
             }
         }
+
         return caminos;
     }
 }
