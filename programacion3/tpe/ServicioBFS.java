@@ -40,7 +40,6 @@ public class ServicioBFS {
         while (!nodosEnCola.isEmpty()) {
             int nodoActual = nodosEnCola.remove(0); // saca del principio
             Iterator<Integer> adyacentes = this.grafo.obtenerAdyacentes(nodoActual);
-
             while (adyacentes.hasNext()) {
                 int adyacente = adyacentes.next();
                 if (!visitados.contains(adyacente)) {
