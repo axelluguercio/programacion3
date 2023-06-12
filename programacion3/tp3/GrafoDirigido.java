@@ -5,18 +5,24 @@ import java.util.*;
 public class GrafoDirigido<T> implements Grafo<T> {
 
     private Map<Integer, List<Arco<T>>> adyacencia;
+    private int cantArcos; // Nuevo atributo para llevar el registro de la cantidad de arcos
 
     public GrafoDirigido() {
         this.adyacencia = new HashMap<>();
+        this.cantArcos = 0; // inicia con 0 arcos
     }
 
+    /**
+     * Complejidad: O(1), La operación put en el mapa adyacencia tiene una complejidad de inserción de O(1) en promedio
+     * Agrega un vertice dado como parametro
+     */
     @Override
     public void agregarVertice(int verticeId) {
         if (!this.adyacencia.containsKey(verticeId)) { adyacencia.put(verticeId, new ArrayList<Arco<T>>()); }
     }
 
     /**
-     * Complejidad: O(N) donde N es la cantidad de arcos que contiene el vertice como destino, a borrar
+     * Complejidad: O(N) donde N se refiere a la cantidad de arcos que se encuentran en la lista de adyacencia del vértice de origen
      * "realizar lo siguiente" para borrar un vertice.
      */
     @Override
@@ -33,7 +39,7 @@ public class GrafoDirigido<T> implements Grafo<T> {
     }
 
     /**
-     * Complejidad: O(1), linear ya que no itera sobre la lista de arcos, si no que en ausencia del vertice devuelve una array vacio
+     *  la complejidad puede considerarse lineal O(N), donde N es el número de arcos existentes en el grafo.
      * "realizar lo siguiente" para agregar un arco.
      */
     @Override
@@ -42,6 +48,8 @@ public class GrafoDirigido<T> implements Grafo<T> {
         List<Arco<T>> adyacenciasOrigen = this.adyacencia.computeIfAbsent(verticeId1, k -> new ArrayList<>());
         // Agregar el arco a la lista de adyacencia del vértice de origen
         adyacenciasOrigen.add(new Arco<T>(verticeId1, verticeId2, etiqueta));
+
+        this.cantArcos++; // Incrementar el contador de arcos
     }
 
     /**
@@ -60,19 +68,24 @@ public class GrafoDirigido<T> implements Grafo<T> {
                 if (arco.getVerticeDestino() == verticeId2) {
                     // Eliminamos el arco de la lista de arcos salientes
                     iter.remove();
+                    this.cantArcos--; // Decrementar el contador de arcos
                     return;
                 }
             }
         }
     }
 
+    /**
+     * Complejidad: O(1), la operación containsKey en el mapa adyacencia tiene una complejidad de búsqueda de O(1) en promedio
+     * Saber si existe un vertice en el grafo
+     */
     @Override
     public boolean contieneVertice(int verticeId) {
         return this.adyacencia.containsKey(verticeId);
     }
 
     /**
-     * Complejidad: O(N), itera sobre la lista de arcos
+     * Complejidad: O(N), donde N se refiere a la cantidad de arcos que se encuentran en la lista de adyacencia del vértice de origen
      * "realizar lo siguiente" para verificar si existe un arco entre dos vertices dados.
      */
     @Override
@@ -92,7 +105,7 @@ public class GrafoDirigido<T> implements Grafo<T> {
     }
 
     /**
-     * Complejidad: O(N), itera sobre la lista de arcos
+     * Complejidad: O(N), donde N se refiere a la cantidad de arcos que se encuentran en la lista de adyacencia del vértice de origen
      * "realizar lo siguiente" para obtener un arco entre dos vertices.
      */
     @Override
@@ -111,17 +124,22 @@ public class GrafoDirigido<T> implements Grafo<T> {
         return new Arco<T>(verticeId1, verticeId2, null);
     }
 
+    /**
+     * Complejidad: O(1), La operación size en el mapa adyacencia tiene una complejidad de O(1) ya que mantiene un contador interno
+     * Devuelve la cantidad de vertices en el arco
+     */
     @Override
     public int cantidadVertices() {
         return this.adyacencia.size();
     }
 
     /**
-     * Complejidad: O(N**2), cuadratica, ya que itera 2 veces, una vez sobre las claves del map, y otra por cada arco de lista retornante
+     * Complejidad: O(1), al llevar un atributo es lineal
      * "realizar lo siguiente" para retornar la cantidad exactas de arcos en el grafo.
      */
     @Override
     public int cantidadArcos() {
+        /* antes de la observacion
         int cantArcos = 0;
         //iterating over keys only
         for (Integer id : adyacencia.keySet()) {
@@ -134,8 +152,14 @@ public class GrafoDirigido<T> implements Grafo<T> {
             }
         }
         return cantArcos;
+         */
+        return this.cantArcos; // Devolver la cantidad de arcos almacenada en el atributo
     }
 
+    /**
+     * Complejidad: O(N), donde N es el número de vértices en el grafo.
+     * devuelve los vertices en un iterador
+     */
     @Override
     public Iterator<Integer> obtenerVertices() {
         return this.adyacencia.keySet().iterator();
@@ -156,6 +180,9 @@ public class GrafoDirigido<T> implements Grafo<T> {
         }
     }
 
+    /**
+     * Complejidad: O(N*M), Si el grafo tiene N vértices y M arcos, y el método es llamado, el iterador debe recorrer todos los arcos para agregarlos a una lista y luego devolver un iterador para esa lista.
+     */
     @Override
     public Iterator<Arco<T>> obtenerArcos() {
         List<Arco<T>> arcos = new ArrayList<>();
