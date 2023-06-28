@@ -38,7 +38,7 @@ La estrategia Backtracking llevada adelante para resolver el problema consiste e
 
 ### Greedy
 
-La estrategia Greedy llevada adelante para resolver el problema se basa en seleccionar en cada paso la conexión más económica disponible, sin considerar las decisiones futuras. En este caso, se implementa una variante del algoritmo de Dijkstra utilizando una cola de prioridad para seleccionar los arcos de menor costo. El costo computacional de esta estrategia depende de la implementación específica y la estructura del grafo, pero en general es más eficiente que el enfoque Backtracking. En este caso, el costo computacional del algoritmo Greedy es del orden de O(E log V), donde E es la cantidad de arcos y V es la cantidad de vértices en el grafo.
+La estrategia Greedy llevada adelante para resolver el problema se basa en seleccionar en cada paso la conexión más económica (arcos con valores menores) disponible. En este caso, se implementa una variante del algoritmo de Dijkstra utilizando una cola de prioridad para seleccionar los arcos de menor costo. El costo computacional de esta estrategia depende de la implementación específica y la estructura del grafo, pero en general es más eficiente que el enfoque Backtracking.
 
 ---
 
@@ -46,11 +46,11 @@ La estrategia Greedy llevada adelante para resolver el problema se basa en selec
 
 Tabla comparativa de los resultados obtenidos por ambas técnicas para distintas entradas posibles
 
-| Entrada      | Backtracking | Greedy  | Tiempo de ejecución (ns) Backtracking | Tiempo de ejecución (ns) Greedy |
-| ------------ | ------------ | ------- | ------ | -------- |
-| dataset1.txt | 30 kms       | 30 kms  | 475416 | 1906000  |
-| dataset2.txt | 165 kms      | 150 kms | 412333 | 2384583  |
-| dataset1.txt | 680 kms      | 510 kms | 4805208 | 3169250 |
+| Entrada      | Backtracking | Greedy  | Cantidad de Ciclos Backtracking | Cantidad de Ciclos Greedy |
+| ------------ | ------------ | ------- |---------------------------------|---------------------------|
+| dataset1.txt | 30 kms       | 30 kms  | 11                              | 10                        |
+| dataset2.txt | 165 kms      | 150 kms | 57                              | 103                       |
+| dataset1.txt | 680 kms      | 510 kms | 8178                            | 2345                      |
 
 ---
 
@@ -58,8 +58,10 @@ Tabla comparativa de los resultados obtenidos por ambas técnicas para distintas
 
 De la comparativa realizada, podemos sacar las siguientes conclusiones:
 
-* En términos de la calidad de la solución (distancia total recorrida), en algunos casos el algoritmo Greedy obtuvo una solución de igual calidad que el algoritmo Backtracking, como en el caso del dataset1.txt donde ambos algoritmos obtuvieron una distancia total de 30 kms. Sin embargo, en otros casos, el algoritmo Greedy obtuvo soluciones de calidad ligeramente superior, como en el dataset2.txt donde el algoritmo Greedy obtuvo una distancia total de 150 kms frente a los 165 kms del algoritmo Backtracking.
+* Distancia recorrida: En general, ambos algoritmos lograron encontrar soluciones con distancias similares. En la mayoría de los casos, la diferencia en la distancia recorrida entre los algoritmos es aceptable, aunque en algunos casos, como en dataset2.txt, la diferencia es un poco más notable.
 
-* En cuanto al tiempo de ejecución, se observa que el algoritmo Greedy en general requiere mayor tiempo que el algoritmo Backtracking para encontrar una solución. En los casos de los datasets analizados, el algoritmo Greedy tuvo tiempos de ejecución más altos que el algoritmo Backtracking.
+* Eficiencia del algoritmo: El algoritmo Greedy muestra una mejor eficiencia en términos de cantidad de ciclos realizados en comparación con el algoritmo de Backtracking. En todos los casos, el algoritmo Greedy realizó menos ciclos para encontrar la solución óptima.
 
-* Se puede concluir que el algoritmo Greedy ofrece una buena entre calidad de la solución y tiempo de ejecución, siempre y cuando el objetivo sea encontra la solucion optima.
+* Escalabilidad: Aunque el algoritmo Greedy fue más eficiente en términos de cantidad de ciclos, es importante considerar su escalabilidad en problemas más grandes. El algoritmo de Backtracking es exhaustivo y busca todas las soluciones posibles, por lo que puede volverse más lento y menos práctico a medida que aumenta el tamaño del grafo y la complejidad del problema. El algoritmo Greedy puede ser más adecuado en esos casos, ya que tiene una complejidad menor.
+
+En general, podemos concluir que el algoritmo Greedy es más eficiente en términos de cantidad de ciclos, pero es importante tener en cuenta la escalabilidad y evaluar el rendimiento en problemas más grandes antes de tomar una decisión final sobre qué algoritmo utilizar.
