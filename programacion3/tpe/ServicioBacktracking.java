@@ -9,17 +9,16 @@ public class ServicioBacktracking {
     private GrafoDirigido<Integer> grafo;
     private int minTotalDistance;
     private List<Integer> bestSolution;
-    private long executionTime; // Variable para almacenar el tiempo de inicio
+    private long metric; // Variable para almacenar el tiempo de inicio
 
     public ServicioBacktracking(GrafoDirigido<Integer> grafo) {
         this.grafo = grafo;
         this.minTotalDistance = Integer.MAX_VALUE;
         this.bestSolution = new ArrayList<>();
-        this.executionTime = 0;
+        this.metric = 0;
     }
 
     public void findBestSolution() {
-        long startTime = System.nanoTime(); // Guardar el tiempo de inicio
         List<Integer> currentSolution = new ArrayList<>();
 
         for (Iterator<Integer> it = grafo.obtenerVertices(); it.hasNext();) {
@@ -29,27 +28,26 @@ public class ServicioBacktracking {
             backtracking(station, currentSolution, currentDistance);
             currentSolution.remove(station);
         }
-
-        long endTime = System.nanoTime(); // Guardar el tiempo de finalización
-        this.executionTime = endTime - startTime; // Calcular el tiempo de ejecución en nanosegundos
     }
 
     private void backtracking(int currentStation, List<Integer> currentSolution, int currentDistance) {
+        // si se recorrio todos los vertices
         if (allStationsVisited(currentSolution)) {
-            if (currentDistance < minTotalDistance) {
+            if (currentDistance < minTotalDistance) { // menor distancia
                 minTotalDistance = currentDistance;
                 bestSolution = new ArrayList<>(currentSolution);
             }
-            return;
         }
 
-        Iterator<Integer> iterador = grafo.obtenerAdyacentes(currentStation);
-        while (iterador.hasNext()) {
-            int nextStation = iterador.next();
-            if (!currentSolution.contains(nextStation)) {
+        Iterator<Integer> iterator = grafo.obtenerAdyacentes(currentStation);
+        while (iterator.hasNext()) {
+            int nextStation = iterator.next();
+            if (!currentSolution.contains(nextStation)) { // si no se visita la siguiente estacion
                 currentSolution.add(nextStation);
 
                 int distance = getDistanceBetweenStations(currentStation, nextStation);
+                //incrementa el contador
+                this.metric++;
                 backtracking(nextStation, currentSolution, currentDistance + distance);
 
                 currentSolution.remove(currentSolution.size() - 1);
@@ -89,7 +87,7 @@ public class ServicioBacktracking {
         }
         resultado.append("\n");
         resultado.append(totalKilometers).append(" kms").append("\n");
-            resultado.append(executionTime).append(" tiempo en ns").append("\n");
+            resultado.append(metric).append(" cantidad de loops").append("\n");
 
         return resultado.toString();
     }
